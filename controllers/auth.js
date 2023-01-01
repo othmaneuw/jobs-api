@@ -1,25 +1,17 @@
-const User = require('../models/User');
-const {StatusCodes} = require('http-status-codes');
-const bcrypt = require('bcryptjs');
+const User = require("../models/User");
+const { StatusCodes } = require("http-status-codes");
+const bcrypt = require("bcryptjs");
 
-const register = async (req,res) =>{
+const register = async (req, res) => {
+  const user = await User.create({ ...req.body });
+  res.status(StatusCodes.CREATED).json({ user });
+};
 
-    const {name,email,password} = req.body;
-
-    const salt = await bcrypt.genSalt(10);
-    const hashedPassword = await bcrypt.hash(password,salt);
-
-    const tempUser = {name,email,password:hashedPassword};
-
-    const user = await User.create({...tempUser});
-    res.status(StatusCodes.CREATED).json({user});
-}
-
-const login = (req,res) =>{
-    res.send('Login request');
-}
+const login = (req, res) => {
+  res.send("Login request");
+};
 
 module.exports = {
-    register,
-    login
+  register,
+  login,
 };
